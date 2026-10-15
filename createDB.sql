@@ -4,9 +4,8 @@
 -- Descripción: Script para crear la BD de Grados
 --
 
-DROP DATABASE IF EXISTS GradesDB;
-CREATE DATABASE GradesDB;
-USE GradesDB;
+CREATE DATABASE IF NOT EXISTS grados;
+USE grados;
 
 -- ============================================================================
 -- Eliminamos tablas previas siguiendo el orden inverso de dependencias
