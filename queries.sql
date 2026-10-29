@@ -100,3 +100,50 @@ SELECT DISTINCT g.academic_year
 FROM groups g 
 ORDER BY g.academic_year DESC;
 
+## consulta 20
+SELECT MAX(g.grade_value) AS max_grade
+FROM grades g
+WHERE g.student_id = 6;
+
+## consulta 21
+SELECT DISTINCT ge.student_id
+FROM group_enrollments ge
+WHERE ge.group_id IN(
+	SELECT g.group_id
+	FROM groups g
+	WHERE g.academic_year = 2024
+);
+
+
+## consulta 22
+SELECT s.subject_name,s.credits
+FROM subjects s
+WHERE s.credits>(SELECT AVG(credits) FROM subjects);
+
+## consulta 23
+SELECT p.first_name, p.last_name, p.dni
+FROM people p
+WHERE p.dni LIKE '%A';
+
+## consulta 24
+SELECT s.subject_name
+FROM subjects s
+WHERE s.subject_name LIKE 'Fundamentos%';
+
+
+## consulta 25
+SELECT p.first_name, p.last_name
+FROM people p
+WHERE p.first_name LIKE '_____';
+
+
+## consulta 26
+SELECT g.group_name, g.activity,g.academic_year
+FROM groups g
+WHERE g.academic_year = 2024;
+
+## consulta 27
+SELECT g.group_name,g.activity,g.academic_year
+FROM groups g
+WHERE g.academic_year BETWEEN 2020 AND 2023
+ORDER BY g.academic_year;
