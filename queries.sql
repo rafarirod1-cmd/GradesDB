@@ -1,4 +1,82 @@
 USE grados;
 
+
+## consulta 1
 SELECT *
 FROM subjects;
+
+## consulta 2
+SELECT *
+FROM subjects s
+WHERE s.acronym='IISSi-1';
+
+## consulta 5
+SELECT p.first_name, p.last_name, st.access_method
+FROM students st
+JOIN people p ON st.student_id = p.person_id
+WHERE st.access_method = 'Selectividad';
+
+## consulta 6
+SELECT p.first_name,p.last_name,pr.category
+FROM professors pr
+JOIN people p ON pr.professor_id = p.person_id
+WHERE pr.category = 'Catedrático';
+
+CREATE OR REPLACE VIEW v_professors AS
+SELECT 
+    pr.professor_id,
+    pr.category,
+    p.person_id,
+    p.dni,
+    p.first_name,
+    p.last_name,
+    p.age,
+    p.email
+FROM professors pr
+JOIN people p ON pr.professor_id = p.person_id;
+
+
+CREATE OR REPLACE VIEW v_students AS
+SELECT 
+    st.student_id,
+    st.access_method,
+    p.person_id,
+    p.dni,
+    p.first_name,
+    p.last_name,
+    p.age,
+    p.email
+FROM students st
+JOIN people p ON st.student_id = p.person_id;
+
+## consulta 7
+SELECT AVG(g.grade_value) AS average_grades
+FROM grades g
+WHERE g.group_id = 1;
+
+
+## consulta 8
+SELECT SUM(s.credits) AS total_credits
+FROM subjects s
+WHERE s.degree_id = 3;
+
+## consulta 10
+SELECT activity, COUNT(*) AS total_groups
+FROM groups
+GROUP BY activity;
+
+## consulta 13
+SELECT g.grade_id, g.grade_value,g.exam_call
+FROM grades g
+WHERE g.grade_value < 5 OR g.grade_value > 9;
+
+
+## consulta 14 
+SELECT g.grade_id, g.grade_value,g.exam_call
+FROM grades g
+WHERE g.grade_value BETWEEN 5 AND 7;
+
+
+SELECT s.subject_name,s.credits
+FROM subjects s
+WHERE s.credits IN (6,12);
