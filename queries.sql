@@ -211,3 +211,45 @@ JOIN groups gr ON s.subject_id=gr.subject_id
 JOIN group_enrollments ge ON gr.group_id=ge.group_id
 JOIN students st ON ge.student_id=st.student_id
 JOIN people p ON st.student_id=p.person_id;
+
+## Consulta 28
+SELECT COUNT(*) AS total_honors
+FROM v_grades_with_honors;
+
+## Consulta 29
+SELECT v.first_name,v.last_name, AVG(v.grade_value) AS average_grade
+FROM v_student_grades v
+GROUP BY v.person_id,v.first_name,v.last_name;
+
+## Consulta 30
+SELECT g.grade_id,g.student_id,g.grade_value,g.exam_call
+FROM grades g
+ORDER BY g.grade_value ASC;
+
+##Consulta 31
+SELECT g.grade_id,g.student_id,g.grade_value,g.exam_call
+FROM grades g
+ORDER BY g.grade_value DESC;
+
+## Consulta 32
+SELECT g.grade_id,g.student_id,g.grade_value,g.exam_call
+FROM grades g
+ORDER BY g.grade_value DESC 
+LIMIT 5;
+
+## Consulta 33
+SELECT
+	st.first_name,
+	st.last_name,
+	g.grade_value,
+	g.exam_call	
+FROM grades g
+JOIN v_students st ON g.student_id=st.student_id
+WHERE g.grade_value >=5
+ORDER BY st.last_name ASC , st.first_name ASC;
+
+## Consulta 34
+SELECT g.grade_id,g.student_id,g.grade_value
+FROM grades g
+ORDER BY g.grade_value DESC 
+LIMIT 5;
