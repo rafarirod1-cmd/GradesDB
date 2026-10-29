@@ -76,7 +76,27 @@ SELECT g.grade_id, g.grade_value,g.exam_call
 FROM grades g
 WHERE g.grade_value BETWEEN 5 AND 7;
 
-
+## consulta 15
 SELECT s.subject_name,s.credits
 FROM subjects s
 WHERE s.credits IN (6,12);
+
+## consulta 16
+SELECT p.first_name,p.last_name,p.age
+FROM people p
+WHERE p.age BETWEEN 20 AND 30;
+
+
+## consulta 17
+SELECT DISTINCT g.group_name
+FROM groups g;
+
+## consulta 18
+SELECT DISTINCT s.subject_type
+FROM subjects s;
+
+## consulta 19
+SELECT DISTINCT g.academic_year
+FROM groups g 
+ORDER BY g.academic_year DESC;
+
