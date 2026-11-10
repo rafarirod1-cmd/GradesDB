@@ -96,4 +96,40 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE OR REPLACE TRIGGER t_biu_students_groups
+CREATE OR REPLACE TRIGGER t_biu_students_group_rn04_rn07
+BEFORE INSERT OR UPDATE ON group_enrollments
+
+FOR EACH ROW 
+BEGIN 
+	DECLARE v_subject_id INT;
+	DECLARE v_activity VARCHAR(15);
+	DECLARE v_old_subject_id INT;
+	DECLARE v_old_activity VARCHAR(15);
+	
+	SELECT subject_id, activity INTO v_subject_id,v_activity 
+	FROM groups 
+	WHERE group_id = NEW.group_id;
+	
+	SET v_old_subject_id = (SELECT subject_id FROM groups WHERE group_id = OLD.group_id);
+	SET v_old_activity = (SELECT activity FROM groups WHERE group_id=OLD.group_id);
+	
+	if NOT f_is_student_enrolled(NEW.student_id,v_subject_id) then 
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'RN07: El alumno debe estar matriculado en la asignatura';
+			
+	END if;
+	
+	if NOT (NEW.student_id <=> OLD.student_id
+				AND v_subject_id <=> v_old_subject_id
+				AND v_activity <=> v_old_activity)
+		AND f_student_group_limit(NEW.student_id,v_subject_id,v_activity) then 
+		if v_activity = 'Teoría' then 
+			SIGNAL SQLSTATE '45000'
+				SET MESSAGE_TEXT = 'RN04: Solo puede haber un grupo de teoría por asignatura y alumno';
+		ELSE 
+			SIGNAL SQLSTATE '45000'
+				SET MESSAGE_TEXT = 'RN04: Solo puede haber un grupo de laboratorio por asignatura y alumno';
+		END if;
+	END if;
+END //
+DELIMITER ;
