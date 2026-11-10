@@ -31,8 +31,7 @@ FROM people p
 JOIN students s ON s.student_id=p.person_id
 WHERE f_student_average(s.student_id) >= 7.0;
 
-
--- Ejemplo 2
+-- La usa el trigger t_biu_students_groups_rn04_rn07
 DELIMITER //
 CREATE OR REPLACE FUNCTION f_is_student_enrolled(
 	p_student_id INT,
@@ -50,6 +49,31 @@ BEGIN
 	RETURN v_exists > 0;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION f_student_group_limit(
+	p_student_id INT,
+ 	p_subject_id INT,
+	p_activity VARCHAR(15)
+)
+RETURNS BOOLEAN 
+DETERMINISTIC 
+READS SQL DATA 
+BEGIN 
+	DECLARE v_count INT;
+	
+	SELECT COUNT(*) INTO v_count
+	FROM group_enrollments ge
+	JOIN groups g ON g.group_id = ge.group_id 
+	WHERE ge.student_id = p_student_id
+		AND g.subject_id = p_subject_id
+		AND g.activity = p_activity;
+		
+	RETURN v_count >= 1;
+END// 
+DELIMITER ;
+
+
 
 SELECT s.subject_id,s.subject_name,
 	f_is_student_enrolled(6,s.subject_id) AS matriculado
