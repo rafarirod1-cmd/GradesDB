@@ -1,3 +1,4 @@
+USE grados;
 DELIMITER //
 CREATE OR REPLACE TRIGGER t_biu_students_rn08
 BEFORE INSERT OR UPDATE ON students 
