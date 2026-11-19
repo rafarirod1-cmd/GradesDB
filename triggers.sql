@@ -133,3 +133,24 @@ BEGIN
 	END if;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE TRIGGER t_biu_groups_rn06
+BEFORE INSERT OR UPDATE ON groups
+FOR EACH ROW 
+BEGIN 
+	if NOT (NEW.subject_id<=>OLD.subject_id
+		AND NEW.activity<=>OLD.activity
+		AND NEW.academic_year<=>OLD.academic_year) then 
+		if f_subject_group_limit_reached(NEW.subject_id,NEW.activity,NEW.academic_year) then 
+			if NEW.activity= 'Teoría' then
+				SIGNAL SQLSTATE '45000'
+					SET MESSAGE_TEXT = 'RN06: Solo puede existir un grupo de teoría por asignatura y año académico';
+			ELSE 
+				SIGNAL SQLSTATE '45000'
+						SET MESSAGE_TEXT = 'RN06: Solo pueden existir dos grupos de laboratorio por asignatura y año académico';
+			END if;
+		END if;
+	END if;
+END //
+DELIMITER ;
